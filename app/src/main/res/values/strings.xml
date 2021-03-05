@@ -1,0 +1,5 @@
+<resources>
+    <string name="app_name">BuscAqui</string>
+    <string name="btn_buscar">Onde estou?</string>
+    <string name="edt_cepinsert">Digite aqui seu CEP!</string>
+</resources>
