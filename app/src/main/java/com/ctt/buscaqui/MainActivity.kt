@@ -20,5 +20,16 @@ class MainActivity : AppCompatActivity() {
         botaoCEP = findViewById(R.id.btnBuscarCep)
         respostaCEP = findViewById(R.id.txtCepResponse)
 
+        botaoCEP.setOnClickListener{
+            val cep = campoCEP.text.toString()
+            if(cep.isNotEmpty()){
+                buscarCEP()
+            } else{
+                campoCEP.error = "Digite um CEP válido"
+            }
+        }
+    }
+
+    fun buscarCEP(cep: String){
     }
 }
