@@ -45,7 +45,7 @@
             app:layout_constraintStart_toStartOf="@+id/gLLeft"
             app:layout_constraintEnd_toStartOf="@+id/gLRight"
             app:layout_constraintTop_toTopOf="@+id/gLTop"
-            app:layout_constraintBottom_toTopOf="@+id/gLMiddle">
+            app:layout_constraintBottom_toTopOf="@+id/gLMiddle"/>
 
     <Button
             android:id="@+id/btnBuscarCep"
@@ -69,6 +69,4 @@
             app:layout_constraintTop_toBottomOf="@+id/btnBuscarCep"
             app:layout_constraintStart_toStartOf="@+id/gLLeft"
             app:layout_constraintEnd_toStartOf="@+id/gLRight"/>
-
-
 </androidx.constraintlayout.widget.ConstraintLayout>

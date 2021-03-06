@@ -5,7 +5,7 @@ import retrofit2.converter.gson.GsonConverterFactory
 
 class Network {
     companion object {
-        fun RetrofitConfig(): Retrofit{
+        fun RetrofitConfig(s: String): Retrofit{
             return Retrofit.Builder() //configura a retrofit
                     //url base da requisição da API
                 .baseUrl("https://viacep.com.br/ws/")

@@ -5,6 +5,9 @@ import android.os.Bundle
 import android.widget.Button
 import android.widget.EditText
 import android.widget.TextView
+import retrofit2.Call
+import retrofit2.Callback
+import retrofit2.Response
 
 class MainActivity : AppCompatActivity() {
 
@@ -23,7 +26,7 @@ class MainActivity : AppCompatActivity() {
         botaoCEP.setOnClickListener{
             val cep = campoCEP.text.toString()
             if(cep.isNotEmpty()){
-                buscarCEP()
+                buscarCEP(cep)
             } else{
                 campoCEP.error = "Digite um CEP válido"
             }
@@ -31,5 +34,35 @@ class MainActivity : AppCompatActivity() {
     }
 
     fun buscarCEP(cep: String){
+        val retrofitClient = Network.RetrofitConfig("https://viacep.com.br/ws/")
+
+        //juntar as pontas
+        val servico = retrofitClient.create(CEPService::class.java)
+
+        //url no navegador
+        val chamada = servico.buscarCEP(cep)
+
+        //realiza a chamada, faz o enter
+        //.execute -> realiza a chamada de maneira sincrona (não depende da ordem de execução)
+        //.enqueue -> chamada assincrona (chamada rápida)
+        chamada.enqueue(
+            object: Callback<CEP>{ //fluxo chamada/resposta
+                override fun onResponse(call: Call<CEP>, response: Response<CEP>) {
+                    val endereco = response.body()?.toString()
+                    endereco?.let{
+                        if(it.isNotEmpty()){
+                            respostaCEP.text = endereco
+                        } else{
+                            campoCEP.error = "Não há informações sobre ele! :("
+                        }
+                    }
+                }
+
+                override fun onFailure(call: Call<CEP>, t: Throwable) {
+                    respostaCEP.text= "Tente novamente mais tarde."
+                }
+
+            }
+        )
     }
 }
