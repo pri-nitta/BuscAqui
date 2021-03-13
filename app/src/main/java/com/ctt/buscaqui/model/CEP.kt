@@ -1,4 +1,4 @@
-package com.ctt.buscaqui
+package com.ctt.buscaqui.model
 
 import com.google.gson.annotations.SerializedName
 

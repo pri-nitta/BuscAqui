@@ -1,19 +1,27 @@
-package com.ctt.buscaqui
+package com.ctt.buscaqui.ui
 
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.util.Log
 import android.widget.Button
 import android.widget.EditText
 import android.widget.TextView
+import com.ctt.buscaqui.CEPService
+import com.ctt.buscaqui.Network
+import com.ctt.buscaqui.R
+import com.ctt.buscaqui.model.CEP
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
+import java.util.*
 
 class MainActivity : AppCompatActivity() {
 
     private lateinit var campoCEP: EditText
     private lateinit var botaoCEP: Button
     private lateinit var respostaCEP: TextView
+
+    private val
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -34,6 +42,10 @@ class MainActivity : AppCompatActivity() {
     }
 
     fun buscarCEP(cep: String){
+        viewModel.buscarCEP(cep).observe(this,
+        object: Observer<CEP> {
+        }
+            )
         val retrofitClient = Network.RetrofitConfig("https://viacep.com.br/ws/")
 
         //juntar as pontas
@@ -48,21 +60,15 @@ class MainActivity : AppCompatActivity() {
         chamada.enqueue(
             object: Callback<CEP>{ //fluxo chamada/resposta
                 override fun onResponse(call: Call<CEP>, response: Response<CEP>) {
-                    val endereco = response.body()?.toString()
-                    endereco?.let{
-                        if(it.isNotEmpty()){
-                            respostaCEP.text = endereco
-                        } else{
-                            campoCEP.error = "Não há informações sobre ele! :("
-                        }
+                   if(response.isSuccessful && response.body()!=null){
+                       cepLiveData.value = response.body()
                     }
                 }
-
                 override fun onFailure(call: Call<CEP>, t: Throwable) {
-                    respostaCEP.text= "Tente novamente mais tarde."
+                   Log.d("TAG", "Deu ruim")
                 }
-
             }
         )
+        return cepLiveData
     }
 }
