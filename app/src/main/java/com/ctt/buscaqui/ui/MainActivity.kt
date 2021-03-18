@@ -21,8 +21,6 @@ class MainActivity : AppCompatActivity() {
     private lateinit var botaoCEP: Button
     private lateinit var respostaCEP: TextView
 
-    private val
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
@@ -42,10 +40,6 @@ class MainActivity : AppCompatActivity() {
     }
 
     fun buscarCEP(cep: String){
-        viewModel.buscarCEP(cep).observe(this,
-        object: Observer<CEP> {
-        }
-            )
         val retrofitClient = Network.RetrofitConfig("https://viacep.com.br/ws/")
 
         //juntar as pontas
@@ -60,8 +54,13 @@ class MainActivity : AppCompatActivity() {
         chamada.enqueue(
             object: Callback<CEP>{ //fluxo chamada/resposta
                 override fun onResponse(call: Call<CEP>, response: Response<CEP>) {
-                   if(response.isSuccessful && response.body()!=null){
-                       cepLiveData.value = response.body()
+                  val endereco = response.body()?.toString()
+                    endereco?.let {
+                        if(it.isNotEmpty()){
+                            respostaCEP.text = it
+                    } else{
+                        campoCEP.error = "Acho que não existe!"
+                        }
                     }
                 }
                 override fun onFailure(call: Call<CEP>, t: Throwable) {
@@ -69,6 +68,5 @@ class MainActivity : AppCompatActivity() {
                 }
             }
         )
-        return cepLiveData
     }
 }
